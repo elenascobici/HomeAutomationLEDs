@@ -1,0 +1,2 @@
+ColoursFade	KEYWORD1
+ColoursFadeLoop	KEYWORD2
