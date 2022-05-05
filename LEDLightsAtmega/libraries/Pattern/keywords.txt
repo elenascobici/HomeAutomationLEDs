@@ -1,0 +1,2 @@
+Pattern	KEYWORD1
+PatternParams	KEYWORD1
