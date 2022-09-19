@@ -4,11 +4,12 @@
 #include <FillSolid.h>
 #include <ColoursFade.h>
 
-const int pin = 5;
-const int ledsCount = 60;
+const int data_pin = 5;
+//const int clock_pin = 6;
+const int ledsCount = 600;
 char goodReply[] = "Atmega Ok!";
 char badReply[] = "Atmega Error";
-const bool debugMode = true;
+const bool debugMode = false;
 
 CRGB leds[ledsCount];
 
@@ -22,26 +23,30 @@ int patternDelayBrightness [3];
 String currentCommandString;
 Pattern* currentPattern;
 
-void setup() {
-  Serial.begin(9600);
-  FastLED.addLeds<WS2812, pin, GRB>(leds, ledsCount);
+//PatternParams* genericPatternParams = new PatternParams();
+FillSolid* fillSolidObj; 
+ColoursFade* coloursFadeObj;
 
-  pinMode(pin, OUTPUT);
+void setup() {
+  Serial1.begin(9600);
+  FastLED.addLeds<WS2812, data_pin, RGB>(leds, ledsCount);
+
+  pinMode(data_pin, OUTPUT);
 }
 
 void showMessage(String message)
 {
   if (debugMode)
   {
-    Serial.print(message + "\n\r");
+    Serial1.print(message + "\n\r");
   }
 }
 
 void loop() {
   bool finished = false;
   //showMessage("I'm in the loop");
-  if (Serial.available() > 0) {
-    oneByte = Serial.read();
+  if (Serial1.available() > 0) {
+    oneByte = Serial1.read();
     //showMessage("I got: " + String(oneByte));
     if (oneByte != '<' && packetString == ""){
       //showMessage(badReply);
@@ -81,9 +86,12 @@ String CutPeriod(String command){
   return command.substring(command.indexOf('.') + 1, command.length() - command.indexOf('.') + 3);
 }
 
+PatternParams* patternParams;
+
 // Create an instance of the PatternParams structure, set the proper attributes and return it
 PatternParams* SetPatternAttributes(String commandString){
-  PatternParams* patternParams = new PatternParams();
+  delete patternParams;
+  patternParams = new PatternParams();
   int i = 0;
   // While the first character of packetString is c, there are more colours to add
   while (commandString[0] == 'c') {
@@ -134,13 +142,19 @@ Pattern* CreatePattern(String commandString){
   PatternParams* patternParams = SetPatternAttributes(commandString);
   switch (patternParams->patternNum){
     case 0:{
+      delete fillSolidObj;
       showMessage("HELLO Index 0 of colours: " + String(patternParams->colours[0]));
       showMessage("HELLO Index 1 of colours: " + String(patternParams->colours[1]));
       showMessage("HELLO Index 2 of colours: " + String(patternParams->colours[2]));
-      return new FillSolid(patternParams);   
+      fillSolidObj = new FillSolid(patternParams);   
+      return fillSolidObj;
+//      return new FillSolid(patternParams);
     }
     case 1:{
-      return new ColoursFade(patternParams);
+      delete coloursFadeObj;
+      coloursFadeObj = new ColoursFade(patternParams);
+      return coloursFadeObj;
+      //return new ColoursFade(patternParams);
     }
     default:{
       return NULL;
