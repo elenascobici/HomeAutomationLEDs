@@ -6,7 +6,7 @@
 
 const int data_pin = 5;
 //const int clock_pin = 6;
-const int ledsCount = 600;
+const int ledsCount = 495;
 char goodReply[] = "Atmega Ok!";
 char badReply[] = "Atmega Error";
 const bool debugMode = false;
