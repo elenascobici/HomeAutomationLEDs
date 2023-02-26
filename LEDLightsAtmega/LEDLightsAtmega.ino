@@ -1,4 +1,3 @@
-#define FASTLED_ALLOW_INTERRUPTS 0
 #include <Arduino.h>
 #include <FastLED.h>
 #include <Pattern.h>
@@ -6,6 +5,7 @@
 #include <ColoursFade.h>
 
 const int dataPin = 5;
+const int commandPin = 2;
 const int ledsCount = 495;
 char goodReply[] = "Atmega Ok!";
 char badReply[] = "Atmega Error";
@@ -26,6 +26,7 @@ PatternParams* patternParams;
 void setup() {
   Serial1.begin(9600);
   FastLED.addLeds<WS2812, dataPin, RGB>(leds, ledsCount);
+  pinMode(commandPin, INPUT);
   pinMode(dataPin, OUTPUT);
 }
 
@@ -70,10 +71,8 @@ void loop() {
     if (currentPattern != NULL) {
       currentPattern->Start();
     }
-  } else if (currentPattern != NULL){
+  } else if (currentPattern != NULL && digitalRead(commandPin) != LOW){
     currentPattern->NextStep();
-  } else {
-    showMessage("Unexpected command received");
   }
 }
 
