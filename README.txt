@@ -9,11 +9,8 @@ The LEDLightsAtmega file was written for the Arduino Atmega 2560 board and the U
 
 
 --- WORK IN PROGRESS ---
-This project is not complete! 
-
-1. I haven't made the OpenHab part yet.
-
-2. Only two presets have been added to the project so far, ColoursFade and FillSolid. I plan to add many more.
+This project is not complete!
+There are more presets being added at the moment.
 
 --- CONTACT ME ---
 If you have any questions or suggestions, please feel free to contact me at elena@scobici.com.
