@@ -93,7 +93,7 @@ Pattern* CreatePattern(PatternParams* patternParams){
 
 // Returns the packet string after cutting everything before and including the first period
 String CutPeriod(String command){
-  return command.substring(command.indexOf('.') + 1, command.length() - command.indexOf('.') + 3);
+  return command.substring(command.indexOf('.') + 1);
 }
 
 // Create an instance of the PatternParams structure, set the proper attributes and return it
